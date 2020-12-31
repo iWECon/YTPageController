@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol YTPageTransitionContext, YTPageTransitionCoordinator, YTPageControllerDelegate, YTPageControllerDataSource;
 
+NS_SWIFT_NAME(PageController)
 @interface YTPageController : UIViewController
 
 /**
@@ -104,7 +105,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-
+NS_SWIFT_NAME(PageTransitionCoordinator)
 @protocol YTPageTransitionCoordinator <NSObject>
 
 /**
@@ -122,6 +123,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  An object that conforms to the YTPageTransitionContext protocol provides information about an in-progress page controller transition.
  */
+NS_SWIFT_NAME(PageTransitionContext)
 @protocol YTPageTransitionContext <NSObject>
 
 /**
@@ -164,6 +166,7 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
+NS_SWIFT_NAME(PageControllerDataSource)
 @protocol YTPageControllerDataSource <NSObject>
 
 /**
@@ -189,6 +192,7 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
+NS_SWIFT_NAME(PageControllerDelegate)
 @protocol YTPageControllerDelegate <NSObject>
 
 @optional
