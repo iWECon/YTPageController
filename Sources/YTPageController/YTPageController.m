@@ -512,24 +512,26 @@ typedef NS_ENUM(NSInteger, YTPageTransitionStartReason) {
         view.layer.timeOffset = 0;
     }
     if (_animationBlocks.count > 0) {
-        CADisplayLink* link = [CADisplayLink displayLinkWithTarget:self selector:@selector(startAnimationsAfterScreenUpdate:)];
-        [link addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+//        CADisplayLink* link = [CADisplayLink displayLinkWithTarget:self selector:@selector(startAnimationsAfterScreenUpdate:)];
+//        [link addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+        [self performSelector:@selector(startAnimationsAfterScreenUpdate:) withObject:nil afterDelay:0];
     }
 }
 
 - (void)startAnimationsAfterScreenUpdate:(CADisplayLink*)link {
-    [link invalidate];
+    if (_animationBlocks.count) {
+        [UIView animateWithDuration:[_context animationDuration] animations:^{
+            for (void(^block)() in _animationBlocks) {
+                block(_context);
+            }
+        }];
+        [_animationBlocks removeAllObjects];
+    }
+    //[link invalidate];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (_animationBlocks.count) {
-            [UIView animateWithDuration:[_context animationDuration] animations:^{
-                for (void(^block)() in _animationBlocks) {
-                    block(_context);
-                }
-            }];
-            [_animationBlocks removeAllObjects];
-        }
-    });
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//
+//    });
 }
 
 - (void)updateTransitionProgress:(CGFloat)progress {
