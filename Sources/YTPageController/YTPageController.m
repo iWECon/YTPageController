@@ -274,20 +274,16 @@ typedef NS_ENUM(NSInteger, YTPageTransitionStartReason) {
     
     _currentIndex = currentIndex;
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [UIView performWithoutAnimation:^{
-            if (self.viewControllers.count > 0 && CGSizeEqualToSize(self._collectionView.contentSize, CGSizeZero)) {
-                [self._collectionView reloadData];
-                [self._collectionView layoutIfNeeded];
-            }
-        }];
-        NSIndexPath* indexPath = [NSIndexPath indexPathForItem:currentIndex inSection:0];
-        [self._collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:animated];
-        
-        if (!animated) {
-            [self _finishTransition:YES];
-        }
-    });
+    if (self.viewControllers.count > 0 && CGSizeEqualToSize(self._collectionView.contentSize, CGSizeZero)) {
+        [self._collectionView layoutIfNeeded];
+    }
+    
+    NSIndexPath* indexPath = [NSIndexPath indexPathForItem:currentIndex inSection:0];
+    [self._collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:animated];
+    
+    if (!animated) {
+        [self _finishTransition:YES];
+    }
 }
 
 - (void)reloadPages {
