@@ -292,18 +292,6 @@ typedef NS_ENUM(NSInteger, YTPageTransitionStartReason) {
     });
 }
 
-- (void)willMoveToParentViewController:(UIViewController *)parent {
-    [super willMoveToParentViewController:parent];
-    
-    if (parent) {
-        // do ?
-        NSLog(@"it has parent");
-    } else {
-        // do?
-        NSLog(@"it has not parent");
-    }
-}
-
 - (void)reloadPages {
     [self._collectionViewDataSource refreshCache];
     [self._collectionView reloadData];
