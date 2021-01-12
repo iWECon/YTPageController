@@ -274,9 +274,9 @@ typedef NS_ENUM(NSInteger, YTPageTransitionStartReason) {
     
     _currentIndex = currentIndex;
     
-    if (self.viewControllers.count > 0 && CGSizeEqualToSize(self._collectionView.contentSize, CGSizeZero)) {
-        [self._collectionView layoutIfNeeded];
-    }
+//    if (self.viewControllers.count > 0 && CGSizeEqualToSize(self._collectionView.contentSize, CGSizeZero)) {
+//        [self._collectionView layoutIfNeeded];
+//    }
     
     NSIndexPath* indexPath = [NSIndexPath indexPathForItem:currentIndex inSection:0];
     [self._collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:animated];
