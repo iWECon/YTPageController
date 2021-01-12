@@ -277,11 +277,10 @@ typedef NS_ENUM(NSInteger, YTPageTransitionStartReason) {
     dispatch_async(dispatch_get_main_queue(), ^{
         NSIndexPath* indexPath = [NSIndexPath indexPathForItem:currentIndex inSection:0];
         [self._collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:animated];
-        
-        if (!animated) {
-            [self _finishTransition:YES];
-        }
     });
+    if (!animated) {
+        [self _finishTransition:YES];
+    }
 }
 
 - (void)willMoveToParentViewController:(UIViewController *)parent {
