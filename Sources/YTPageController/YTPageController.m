@@ -238,6 +238,14 @@ typedef NS_ENUM(NSInteger, YTPageTransitionStartReason) {
     _collectionView.scrollEnabled = scrollEnabled;
 }
 
+/// bugfix: currentViewController always return nil when tap segment before.
+- (void)setViewControllers:(NSArray<__kindof UIViewController *> *)viewControllers {
+    _viewControllers = viewControllers;
+    if (viewControllers.count > 0 && _currentIndex == -1) {
+        _currentIndex = 0;
+    }
+}
+
 - (UIViewController *)currentViewController {
     if (_currentIndex < 0 || _currentIndex >= self._collectionViewDataSource.numberOfViewControllers) {
         return nil;
@@ -273,23 +281,12 @@ typedef NS_ENUM(NSInteger, YTPageTransitionStartReason) {
     [self _startTransitionToIndex:currentIndex reason:YTPageTransitionStartedProgrammically];
     
     _currentIndex = currentIndex;
-    if (NSThread.isMainThread) {
-        NSIndexPath* indexPath = [NSIndexPath indexPathForItem:currentIndex inSection:0];
-        [self._collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:animated];
-        
-        if (!animated) {
-            [self _finishTransition:YES];
-        }
-        return;
+    NSIndexPath* indexPath = [NSIndexPath indexPathForItem:currentIndex inSection:0];
+    [self._collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:animated];
+    
+    if (!animated) {
+        [self _finishTransition:YES];
     }
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSIndexPath* indexPath = [NSIndexPath indexPathForItem:currentIndex inSection:0];
-        [self._collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:animated];
-        
-        if (!animated) {
-            [self _finishTransition:YES];
-        }
-    });
 }
 
 - (void)reloadPages {
