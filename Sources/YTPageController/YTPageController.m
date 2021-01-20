@@ -401,18 +401,26 @@ typedef NS_ENUM(NSInteger, YTPageTransitionStartReason) {
 
 - (UICollectionViewFlowLayout *)_collectionLayout {
     if (!_collectionLayout) {
-        _collectionLayout = [UICollectionViewFlowLayout new];
-        _collectionLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-        _collectionLayout.itemSize = self.view.bounds.size;
-        _collectionLayout.minimumLineSpacing = 0;
-        _collectionLayout.minimumInteritemSpacing = 0;
+        if (_collectionViewLayoutProvider != nil) {
+            _collectionLayout = _collectionViewLayoutProvider();
+        } else {
+            _collectionLayout = [UICollectionViewFlowLayout new];
+            _collectionLayout.itemSize = self.view.bounds.size;
+            _collectionLayout.minimumLineSpacing = 0;
+            _collectionLayout.minimumInteritemSpacing = 0;
+            _collectionLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+        }
     }
     return _collectionLayout;
 }
 
 - (UICollectionView *)_collectionView {
     if (!_collectionView) {
-        _collectionView = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:self._collectionLayout];
+        if (_collectionViewProvider != nil) {
+            _collectionView = _collectionViewProvider(self.view.bounds, self._collectionLayout);
+        } else {
+            _collectionView = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:self._collectionLayout];
+        }
         _collectionView.backgroundColor = [UIColor clearColor];
         _collectionView.showsHorizontalScrollIndicator = NO;
         _collectionView.pagingEnabled = YES;

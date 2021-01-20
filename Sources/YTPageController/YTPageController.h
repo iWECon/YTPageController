@@ -15,6 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
 NS_SWIFT_NAME(PageController)
 @interface YTPageController : UIViewController
 
+@property (nullable, nonatomic, copy) UICollectionView* (^collectionViewProvider)(CGRect, UICollectionViewLayout *);
+
+@property (nullable, nonatomic, copy) UICollectionViewFlowLayout* (^collectionViewLayoutProvider)();
+
 /**
  The delegate object.
  */
