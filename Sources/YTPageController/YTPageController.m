@@ -409,6 +409,7 @@ typedef NS_ENUM(NSInteger, YTPageTransitionStartReason) {
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
     if (!UIEdgeInsetsEqualToEdgeInsets(_edgeSwipeNonResponseRange, UIEdgeInsetsZero) &&
+        [otherGestureRecognizer isKindOfClass:[UISwipeGestureRecognizer class]] &&
         [gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
         
         UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)gestureRecognizer;

@@ -17,4 +17,12 @@
     return NO;
 }
 
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    if (_gestureDelegate && [_gestureDelegate respondsToSelector:@selector(gestureRecognizer:shouldRequireFailureOfGestureRecognizer:)]) {
+        return [_gestureDelegate gestureRecognizer:gestureRecognizer
+           shouldRequireFailureOfGestureRecognizer:otherGestureRecognizer];
+    }
+    return NO;
+}
+
 @end
