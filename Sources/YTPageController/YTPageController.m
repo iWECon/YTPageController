@@ -409,7 +409,7 @@ typedef NS_ENUM(NSInteger, YTPageTransitionStartReason) {
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
     if (!UIEdgeInsetsEqualToEdgeInsets(_edgeSwipeNonResponseRange, UIEdgeInsetsZero) &&
-        [otherGestureRecognizer isKindOfClass:[UISwipeGestureRecognizer class]] &&
+        [NSStringFromClass([otherGestureRecognizer class]) containsString:@"Swipe"] &&
         [gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
         
         UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)gestureRecognizer;
@@ -424,6 +424,13 @@ typedef NS_ENUM(NSInteger, YTPageTransitionStartReason) {
 }
 
 #pragma mark - Getters
+
+//- (void)setEdgeSwipeNonResponseRange:(UIEdgeInsets)edgeSwipeNonResponseRange {
+//    _edgeSwipeNonResponseRange = edgeSwipeNonResponseRange;
+//    if (!_collectionView) { return; }
+//    _collectionView.delaysContentTouches = NO;
+//    _collectionView.canCancelContentTouches = NO;
+//}
 
 - (UICollectionViewFlowLayout *)_collectionLayout {
     if (!_collectionLayout) {
@@ -449,6 +456,10 @@ typedef NS_ENUM(NSInteger, YTPageTransitionStartReason) {
             collectionView.gestureDelegate = self;
             _collectionView = collectionView;
         }
+//        if ((_collectionView.delaysContentTouches != NO || _collectionView.canCancelContentTouches != NO) && UIEdgeInsetsEqualToEdgeInsets(_edgeSwipeNonResponseRange, UIEdgeInsetsZero)) {
+//            _collectionView.delaysContentTouches = NO;
+//            _collectionView.canCancelContentTouches = NO;
+//        }
         _collectionView.backgroundColor = [UIColor clearColor];
         _collectionView.showsHorizontalScrollIndicator = NO;
         _collectionView.pagingEnabled = YES;
