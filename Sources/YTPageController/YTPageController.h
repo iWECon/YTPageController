@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol YTPageTransitionContext, YTPageTransitionCoordinator, YTPageControllerDelegate, YTPageControllerDataSource;
+@protocol YTPageTransitionContext, YTPageTransitionCoordinator, YTPageControllerDelegate, YTPageControllerDataSource, YTPageControllerRecognizerSimultaneouslyDelegate;
 
 NS_SWIFT_NAME(PageController)
 @interface YTPageController : UIViewController
@@ -18,6 +18,20 @@ NS_SWIFT_NAME(PageController)
 @property (nullable, nonatomic, copy) UICollectionView* (^collectionViewProvider)(CGRect, UICollectionViewLayout *);
 
 @property (nullable, nonatomic, copy) UICollectionViewFlowLayout* (^collectionViewLayoutProvider)();
+
+/**
+ Effective when collectionViewProvider is not used.
+ 不使用 `collectionViewProvider` 时生效.
+ */
+@property (nullable, nonatomic, weak) IBOutlet id<YTPageControllerRecognizerSimultaneouslyDelegate> recognizerSimultaneouslyDelegate;
+
+/**
+ Effective when collectionViewProvider is not used.
+ Edge slide non-response range. Default is UIEdgeInsetZero.
+ 不使用 `collectionViewProvider` 时生效.
+ 边缘滑动不响应范围. 默认为 UIEdgeInsetZero 全部范围响应.
+ */
+@property (nonatomic) UIEdgeInsets edgeSwipeNonResponseRange;
 
 /**
  The delegate object.
@@ -231,6 +245,13 @@ NS_SWIFT_NAME(PageControllerDelegate)
 
 /// Deprecated. Use -pageController:willStartTransition: instead.
 - (void)pageController:(YTPageController*)pageController willTransitionToIndex:(NSInteger)index API_DEPRECATED_WITH_REPLACEMENT("-pageController:willStartTransition:", ios(8.0, 8.0));
+
+@end
+
+NS_SWIFT_NAME(PageControllerRecognizerSimultaneouslyDelegate)
+@protocol YTPageControllerRecognizerSimultaneouslyDelegate <NSObject>
+
+- (BOOL)pageController:(YTPageController *)pageController gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer otherGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer;
 
 @end
 

@@ -7,6 +7,7 @@
 //
 
 #import "YTPageController.h"
+#import "YTCollectionView.h"
 
 #ifndef YTPageLogEnabled
 #define YTPageLogEnabled 0
@@ -109,7 +110,7 @@ typedef NS_ENUM(NSInteger, YTPageTransitionStartReason) {
 
 #pragma mark - YTPageController
 
-@interface YTPageController ()<UICollectionViewDelegateFlowLayout>
+@interface YTPageController ()<UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate>
 
 @property (nonatomic) UICollectionViewFlowLayout* _collectionLayout;
 @property (nonatomic) UICollectionView* _collectionView;
@@ -164,6 +165,7 @@ typedef NS_ENUM(NSInteger, YTPageTransitionStartReason) {
 - (void)_commonInit {
     _scrollEnabled = YES;
     _currentIndex = -1;
+    _edgeSwipeNonResponseRange = UIEdgeInsetsZero;
 }
 
 - (void)viewDidLoad {
@@ -397,6 +399,29 @@ typedef NS_ENUM(NSInteger, YTPageTransitionStartReason) {
     _coordinator = nil;
 }
 
+#pragma mark - UIGestureRecognizerDelgate
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    if (_recognizerSimultaneouslyDelegate && [_recognizerSimultaneouslyDelegate respondsToSelector:@selector(pageController:gestureRecognizer:otherGestureRecognizer:)]) {
+        return [_recognizerSimultaneouslyDelegate pageController:self gestureRecognizer:gestureRecognizer otherGestureRecognizer:otherGestureRecognizer];
+    }
+    return NO;
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    if (!UIEdgeInsetsEqualToEdgeInsets(_edgeSwipeNonResponseRange, UIEdgeInsetsZero) &&
+        [gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
+        
+        UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)gestureRecognizer;
+        CGPoint touchPoint = [pan locationInView:self.view];
+        BOOL nonResponseLeft = touchPoint.x <= _edgeSwipeNonResponseRange.left;
+        BOOL nonResponseRight = touchPoint.x >= (self.view.frame.size.width - _edgeSwipeNonResponseRange.right);
+        BOOL nonResponseTop = touchPoint.y <= _edgeSwipeNonResponseRange.top;
+        BOOL nonResponseBottom = touchPoint.y >= (self.view.frame.size.height - _edgeSwipeNonResponseRange.bottom);
+        return nonResponseLeft || nonResponseRight || nonResponseTop || nonResponseBottom;
+    }
+    return NO;
+}
+
 #pragma mark - Getters
 
 - (UICollectionViewFlowLayout *)_collectionLayout {
@@ -419,7 +444,9 @@ typedef NS_ENUM(NSInteger, YTPageTransitionStartReason) {
         if (_collectionViewProvider != nil) {
             _collectionView = _collectionViewProvider(self.view.bounds, self._collectionLayout);
         } else {
-            _collectionView = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:self._collectionLayout];
+            YTCollectionView *collectionView = [[YTCollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:self._collectionLayout];
+            collectionView.gestureDelegate = self;
+            _collectionView = collectionView;
         }
         _collectionView.backgroundColor = [UIColor clearColor];
         _collectionView.showsHorizontalScrollIndicator = NO;
