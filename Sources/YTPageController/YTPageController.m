@@ -412,6 +412,11 @@ typedef NS_ENUM(NSInteger, YTPageTransitionStartReason) {
         [NSStringFromClass([otherGestureRecognizer class]) containsString:@"Swipe"] &&
         [gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
         
+        // bugfix when no set `_edgeSwipeNonResponseRange`
+        if (UIEdgeInsetsEqualToEdgeInsets(_edgeSwipeNonResponseRange, UIEdgeInsetsZero)) {
+            return YES;
+        }
+        
         UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)gestureRecognizer;
         CGPoint touchPoint = [pan locationInView:self.view];
         BOOL nonResponseLeft = touchPoint.x <= _edgeSwipeNonResponseRange.left;
