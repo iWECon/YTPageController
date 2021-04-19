@@ -18,9 +18,10 @@
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-    if (_gestureDelegate && [_gestureDelegate respondsToSelector:@selector(gestureRecognizer:shouldRequireFailureOfGestureRecognizer:)]) {
-        return [_gestureDelegate gestureRecognizer:gestureRecognizer
-           shouldRequireFailureOfGestureRecognizer:otherGestureRecognizer];
+    if (_gestureDelegate && [_gestureDelegate respondsToSelector:@selector(gestureRecognizer:shouldRequireFailureOfGestureRecognizer:)] &&
+        [NSStringFromClass([otherGestureRecognizer class]) containsString:@"Swipe"] &&
+        [gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
+        return YES;
     }
     return NO;
 }
