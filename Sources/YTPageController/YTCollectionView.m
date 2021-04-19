@@ -18,11 +18,16 @@
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    NSLog(@"------------------------");
+    NSLog(@"gestureRecognizer: %@", gestureRecognizer);
+    NSLog(@"otherGestureRecognizer: %@", otherGestureRecognizer);
     if (_gestureDelegate && [_gestureDelegate respondsToSelector:@selector(gestureRecognizer:shouldRequireFailureOfGestureRecognizer:)] &&
         [NSStringFromClass([otherGestureRecognizer class]) containsString:@"Swipe"] &&
         [gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
+        NSLog(@"IF------------------------");
         return YES;
     }
+    NSLog(@"------------------------");
     return NO;
 }
 
