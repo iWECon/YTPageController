@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
     s.name = 'YTPageController'
-    s.version = '1.1.8'
+    s.version = '1.1.9'
     s.license = { :type => 'MIT' }
     s.homepage = 'https://github.com/iWECon/YTPageController'
     s.authors = 'iWw'

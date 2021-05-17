@@ -168,9 +168,9 @@ typedef NS_ENUM(NSInteger, YTPageTransitionStartReason) {
     _edgeSwipeNonResponseRange = UIEdgeInsetsZero;
 }
 
-- (BOOL)automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers {
-    return false;
-}
+//- (BOOL)automaticallyForwardAppearanceAndRotationMethodsToChildViewControllers {
+//    return false;
+//}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
